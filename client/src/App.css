@@ -1,0 +1,61 @@
+.App {
+  background-color: #0086d1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-size: calc(10px + 2vmin);
+  color: white;
+
+}
+
+.App-logo {
+
+}
+
+.App-header
+{
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: content;
+}
+
+
+
+.App-header {
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+#videoElement {
+  width: 500px;
+  height: 375px;
+  background-color: #666;
+}
+
+.upload-button
+{
+  width: 100%;
+}
+
+.camArea {
+  flex-grow: 1;
+}
+
+.eb-logo
+{
+  width: 150px;
+}
