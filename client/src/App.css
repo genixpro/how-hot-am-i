@@ -51,6 +51,12 @@
   width: 100%;
 }
 
+
+.select-photo-button
+{
+  width: 100%;
+}
+
 .camArea {
   flex-grow: 1;
 }
