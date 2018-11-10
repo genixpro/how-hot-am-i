@@ -100,7 +100,6 @@ class App extends Component {
             var reader  = new FileReader();
 
               reader.addEventListener("load", function () {
-                alert(reader.result);
                 axios.post('http://localhost:5000/', {"image": reader.result}).then((response) =>
                 {
                     console.log(response.data);

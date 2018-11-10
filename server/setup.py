@@ -4,7 +4,12 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".."))
 from setuptools import setup, find_packages
 
 requires = [
-    'Flask'
+    'Flask',
+    'flask_cors',
+    'tensorflow-gpu',
+    'pandas',
+    'keras',
+    'scikit-image'
 ]
 
 setup(
@@ -25,7 +30,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     extras_require={
-        'testing': tests_require,
+
     },
     package_data={
         "howhotami": [
@@ -41,7 +46,7 @@ setup(
             'main = fathion:main',
         ],
         'console_scripts': [
-            'how_hot_am_i_server = howhotami.index:main',
+            'howhotami_train = howhotami.train:trainModel',
         ]
     },
 )
