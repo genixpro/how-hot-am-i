@@ -17,6 +17,8 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+import { jsx } from '@emotion/core'
+import { ClipLoader } from 'react-spinners';
 
 class App extends Component {
 
@@ -25,7 +27,9 @@ class App extends Component {
         this.state = {
             video: null,
             showingResults: false,
-            score: null
+            score: null,
+            loadingWebcam: false,
+            loadingUpload: false
         }
     }
 
@@ -113,12 +117,16 @@ class App extends Component {
         const imageSrc = this.webcam.getScreenshot();
         if (imageSrc)
         {
-            axios.post('/process', {"image": imageSrc}).then((response) =>
+
+        this.setState({loadingWebcam: true});
+            axios.post('http://howhotami.xyz/process', {"image": imageSrc}).then((response) =>
             {
+                this.setState({loadingWebcam: false});
                 this.updateWithScore(response.data.score, response.data.image);
 
             }, (error) =>
             {
+                this.setState({loadingWebcam: false});
                 alert(error.toString() + error.body.toString());
             })
         }
@@ -133,11 +141,14 @@ class App extends Component {
             var reader  = new FileReader();
 
               reader.addEventListener("load", function () {
-                axios.post('/process', {"image": reader.result}).then((response) =>
+                self.setState({loadingUpload: true});
+                axios.post('http://howhotami.xyz/process', {"image": reader.result}).then((response) =>
                 {
+                    self.setState({loadingUpload: false});
                     self.updateWithScore(response.data.score, response.data.image);
                 }, (error) =>
                 {
+                    self.setState({loadingUpload: false});
                     alert(error.toString() + error.body.toString());
                 })
               }, false);
@@ -157,7 +168,7 @@ class App extends Component {
 
     render() {
         const videoConstraints = {
-          // facingMode: {"ideal": "user"}
+           facingMode: {"ideal": "user"}
         };
 
         return (
@@ -181,13 +192,37 @@ class App extends Component {
                                         <br/>
 
 
-                                        <Button className={"upload-button"} onClick={this.submitPressed.bind(this)}>Upload Photo</Button>
-                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>Select Photo</Button>
+                                        <Button className={"upload-button"} onClick={this.submitPressed.bind(this)}>
+                                            <span>Upload Photo</span>
+                                            &nbsp;
+                                            <ClipLoader
+                                              sizeUnit={"px"}
+                                              size={16}
+                                              color={'#ffffff'}
+                                              loading={this.state.loadingWebcam} />
+                                        </Button>
+                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>
+                                            <span>Select Photo</span>
+                                            &nbsp;
+                                            <ClipLoader
+                                              sizeUnit={"px"}
+                                              size={16}
+                                              color={'#ffffff'}
+                                              loading={this.state.loadingUpload} />
+                                        </Button>
                                     </CardBody>
                                 </BrowserView>
                                 <MobileView>
                                     <CardBody className={"camArea"}>
-                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>Take Photo</Button>
+                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>
+                                            <span>Take Photo</span>
+                                            &nbsp;
+                                            <ClipLoader
+                                              sizeUnit={"px"}
+                                              size={16}
+                                              color={'#ffffff'}
+                                              loading={this.state.loadingUpload} />
+                                        </Button>
                                     </CardBody>
                                 </MobileView>
                             </Card> : null
