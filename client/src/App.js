@@ -11,6 +11,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import {BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import { FacebookProvider, ShareButton } from 'react-facebook';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 class App extends Component {
 
@@ -105,14 +111,17 @@ class App extends Component {
 
     submitPressed() {
         const imageSrc = this.webcam.getScreenshot();
-        axios.post('/process', {"image": imageSrc}).then((response) =>
+        if (imageSrc)
         {
-            this.updateWithScore(response.data.score, response.data.image);
+            axios.post('/process', {"image": imageSrc}).then((response) =>
+            {
+                this.updateWithScore(response.data.score, response.data.image);
 
-        }, (error) =>
-        {
-            alert(error.toString() + error.body.toString());
-        })
+            }, (error) =>
+            {
+                alert(error.toString() + error.body.toString());
+            })
+        }
     }
 
     selectPhoto() {
@@ -148,7 +157,7 @@ class App extends Component {
 
     render() {
         const videoConstraints = {
-          facingMode: "user"
+          // facingMode: {"ideal": "user"}
         };
 
         return (
@@ -160,20 +169,27 @@ class App extends Component {
                 <div>
                     {
                         !this.state.showingResults ?
-                            <Card>
-                                <CardBody className={"camArea"}>
-                                    <Webcam
-                                        videoConstraints={videoConstraints}
-                                        ref={this.setRef.bind(this)}
-                                        screenshotFormat="image/jpeg"
-                                        screenshotWidth={1280}
-                                    />
-                                    <br/>
+                            <Card className={"video-card"}>
+                                <BrowserView>
+                                    <CardBody className={"camArea"}>
+                                        <Webcam
+                                            videoConstraints={videoConstraints}
+                                            ref={this.setRef.bind(this)}
+                                            screenshotFormat="image/jpeg"
+                                            screenshotWidth={1280}
+                                        />
+                                        <br/>
 
 
-                                    <Button className={"upload-button"} onClick={this.submitPressed.bind(this)}>Upload Photo</Button>
-                                    <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>Select Photo</Button>
-                                </CardBody>
+                                        <Button className={"upload-button"} onClick={this.submitPressed.bind(this)}>Upload Photo</Button>
+                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>Select Photo</Button>
+                                    </CardBody>
+                                </BrowserView>
+                                <MobileView>
+                                    <CardBody className={"camArea"}>
+                                        <Button className={"select-photo-button"} onClick={this.selectPhoto.bind(this)}>Take Photo</Button>
+                                    </CardBody>
+                                </MobileView>
                             </Card> : null
                     }
                 </div>
@@ -183,14 +199,14 @@ class App extends Component {
                             <Card className="resultsCard">
                                 <CardBody className={"camArea"}>
                                     <Row>
-                                        <Col xs={4}>
+                                        <Col xs={12} md={4}>
                                             <img src={this.state.faceImage} style={{width: "80%"}} />
                                         </Col>
-                                        <Col xs={8}>
+                                        <Col xs={12} md={8}>
                                             <p>Your a {Math.round(this.state.score*10)/10}</p>
                                             <p>Your face is more attractive then {this.state.percentileScore}% of peoples faces.</p>
 
-                                            <BarChart width={730} height={250} data={this.state.data}>
+                                            <BarChart width={450} height={250} data={this.state.data}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="name" tickCount={5} />
                                                 <YAxis />
