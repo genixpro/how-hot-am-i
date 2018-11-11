@@ -57,6 +57,22 @@
   width: 100%;
 }
 
+.try-again-button
+{
+    width: 100%;
+}
+
+
+.resultsCard p
+{
+    color: #333333;
+}
+
+.share-button
+{
+  width: 100%;
+}
+
 .camArea {
   flex-grow: 1;
 }

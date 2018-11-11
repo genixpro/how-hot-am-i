@@ -9,7 +9,8 @@ requires = [
     'tensorflow',
     'pandas',
     'keras',
-    'scikit-image'
+    'scikit-image',
+    'azure-storage'
 ]
 
 setup(

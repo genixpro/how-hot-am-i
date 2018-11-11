@@ -30,8 +30,7 @@ def trainModel():
                 images.append(rating['Filename'])
 
             score = float(rating['Rating'])
-            # normalized = (score - 1)/4
-            normalized = score/5
+            normalized = score*2
 
             ratings[rating['Filename']].append(normalized)
 
@@ -39,6 +38,9 @@ def trainModel():
         ratings[f] = numpy.average(ratings[f])
 
     sortedScores = sorted([ratings[f] for f in images])
+
+    print(json.dumps(sorted([round(ratings[image]*1000)/1000 for image in images])))
+
     for f in images:
         ratings[f] = float(sortedScores.index(ratings[f])) / float(len(images))
 
