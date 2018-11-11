@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 requires = [
     'Flask',
     'flask_cors',
-    'tensorflow-gpu',
+    'tensorflow',
     'pandas',
     'keras',
     'scikit-image'

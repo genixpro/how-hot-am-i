@@ -7,7 +7,6 @@ import sys
 import time
 import numpy as np
 import tensorflow as tf
-import cv2
 
 from .utils import label_map_util
 from .utils import visualization_utils_color as vis_util
@@ -51,7 +50,8 @@ class TensoflowFaceDector(object):
         return (boxes, scores, classes, num_detections)
         """
 
-        image_np = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image_np = np.copy(image)
+        np.flip(image_np, axis=2)
 
         # the array based representation of the image will be used later in order to prepare the
         # result image with boxes and labels on it.

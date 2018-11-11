@@ -76,7 +76,7 @@ class App extends Component {
     submitPressed() {
         const imageSrc = this.webcam.getScreenshot();
 
-        axios.post('http://localhost:5000/', {"image": imageSrc}).then((response) =>
+        axios.post('/process', {"image": imageSrc}).then((response) =>
         {
             console.log(response.data);
             alert(response.data.score.toString())
@@ -100,7 +100,7 @@ class App extends Component {
             var reader  = new FileReader();
 
               reader.addEventListener("load", function () {
-                axios.post('http://localhost:5000/', {"image": reader.result}).then((response) =>
+                axios.post('/process', {"image": reader.result}).then((response) =>
                 {
                     console.log(response.data);
                     alert(response.data.score.toString())

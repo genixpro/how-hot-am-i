@@ -8,10 +8,10 @@ from flask_cors import CORS
 import numpy
 import json
 import random
-import cv2
 import math
 import tensorflow as tf
 import skimage.util
+import skimage.draw
 
 from .tensorflow_face_detection.inference_usbCam_face import TensoflowFaceDector
 
@@ -29,7 +29,7 @@ def cropFace(imageData):
     (boxes, scores, classes, num_detections) = tDetector.run(imageData)
 
     box = boxes[0][0]
-    xmin, ymin, xmax, ymax = tuple(box)
+    ymin, xmin, ymax, xmax = tuple(box)
 
     xmin = int(xmin * imageData.shape[1])
     xmax = int(xmax * imageData.shape[1])
@@ -42,11 +42,11 @@ def cropFace(imageData):
 
     circleRadius = int(max(ymax - ymin, xmax - xmin) * 0.5 * 1.2)
 
-    mask = numpy.zeros((imageData.shape[0], imageData.shape[1], 3),dtype=numpy.uint8)
+    mask = numpy.zeros((imageData.shape[0], imageData.shape[1], 3), dtype=numpy.uint8)
 
-    cv2.circle(mask, (circleCenterX, circleCenterY), circleRadius, (255, 255, 255), -1, 8, 0)
+    rr, cc = skimage.draw.circle(circleCenterY, circleCenterX, circleRadius, shape=(imageData.shape[0], imageData.shape[1]))
+    mask[rr, cc, :] = 1
 
-    #cv2.imwrite(argv[2],mask)
     out = imageData * mask
     white = 255 * (1.0 - mask)
 
@@ -59,12 +59,14 @@ def cropFace(imageData):
     ymax = circleCenterY + circleRadius
 
     xmin = max(0, int(xmin))
-    xmax = min(imageData.shape[0], int(xmax))
+    xmax = min(imageData.shape[1], int(xmax))
 
     ymin = max(0, int(ymin))
-    ymax = min(imageData.shape[1], int(ymax))
+    ymax = min(imageData.shape[0], int(ymax))
 
-    return imageData[ymin:ymax, xmin:xmax, :]
+    cropped = imageData[ymin:ymax, xmin:xmax, :]
+
+    return cropped
 
 
 def cropFaceAndPad(imageData):
