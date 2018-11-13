@@ -52,7 +52,7 @@ def analyzePhoto():
 
     imageBatch = imageBatch * (1.0 / 255.0)
 
-    score = max(0.0, min(0.999, float(beautyModel.predict(imageBatch)[0]) * 1.15 + 0.10))
+    score = max(0.0, min(0.999, float(beautyModel.predict(imageBatch)[0]) * 1.05 + 0.10))
 
     outImage = BytesIO()
     imsave(outImage, imageBatch[0] * 255.0, 'jpeg')
