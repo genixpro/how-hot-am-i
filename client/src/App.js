@@ -119,7 +119,7 @@ class App extends Component {
         {
 
         this.setState({loadingWebcam: true});
-            axios.post('http://howhotami.xyz/process', {"image": imageSrc}).then((response) =>
+            axios.post('/process', {"image": imageSrc}).then((response) =>
             {
                 this.setState({loadingWebcam: false});
                 this.updateWithScore(response.data.score, response.data.image);
@@ -142,7 +142,7 @@ class App extends Component {
 
               reader.addEventListener("load", function () {
                 self.setState({loadingUpload: true});
-                axios.post('http://howhotami.xyz/process', {"image": reader.result}).then((response) =>
+                axios.post('/process', {"image": reader.result}).then((response) =>
                 {
                     self.setState({loadingUpload: false});
                     self.updateWithScore(response.data.score, response.data.image);
